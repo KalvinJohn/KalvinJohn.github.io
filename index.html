@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<head>
+    <title>
+        TIC TAC TOE
+    </title>
+<style>
+   body{
+    text-align: center;
+    background-color:rgb(254, 152, 13);
+   }
+   #can{
+    color:black;
+   }
+   button{
+    width: 100px;
+    height:50px;
+    background-color: red;
+    font-size: large;
+    font-style: Arial;
+    border:0;
+   }
+   section{
+    text-align: center;
+   }
+   
+</style>
+
+</head>
+<body>
+    <h1>
+        TIC TAC TOE
+    </h1>
+    
+    <canvas id="can" width="300px" height="300px" >
+        
+    
+    </canvas>
+   <h2 id="message">
+   </h2>
+   <section>
+    <button id="o" onclick="location.reload()">Reset</button>
+    </section>
+    <script>
+     
+     
+     
+        var t=document.getElementById("can");
+        var ctx=t.getContext('2d');
+        ctx.lineWidth=10 ;
+        ctx.moveTo(100,0);//moves the point to (100,0)
+        ctx.lineTo(100,300);//draws the line from (100,0) to (100,300)
+        ctx.moveTo(200,0);
+        ctx.lineTo(200,300);
+        ctx.moveTo(0,100);
+        ctx.lineTo(300,100);
+        ctx.moveTo(0,200);
+        ctx.lineTo(300,200)
+        ctx.stroke();
+        let left=t.offsetLeft+t.clientLeft; 
+        let to=t.offsetTop+t.clientTop; //offsetLeft and offsetTop returns the left most position and topmost position from page respectively
+                      //offsetWidth and offsetHeight returns the width and height of element
+                            //clientleft and clientTop returns the size of the border
+                           
+        var img1=new Image();
+        img1.src="./X.jpg"
+        var img2=new Image();
+        img2.src="./O.jpg"   
+        let arr=[9];         
+        let i=0; 
+       
+        for(let k=0;k<9;k++)
+        {
+            arr[k]=k;
+        }     
+        let r=0;
+        t.addEventListener('click',function(clicked){
+            
+            var x=clicked.pageX-left;
+            var y=clicked.pageY-to;
+            let s="";
+            if((i%2)==0)
+            s='X';
+            else
+             s="O";
+             if(r==1)
+             draw(0,0,0,0);
+            else if((x>0)&&(x<100)&&(y>0)&&(y<100))
+            draw(s,0,0,0);
+            else if((x>100)&&(x<200)&&(y<100)&&(y>0))
+            draw(s,100,0,1);
+            else if((x>200)&&(x<300)&&(y<100)&&(y>0))
+            draw(s,200,0,2);
+            else if((x>0)&&(x<100)&&(y<200)&&(y>100))
+            draw(s,0,100,3);
+            else if((x>100)&&(x<200)&&(y<200)&&(y>100))
+            draw(s,100,100,4);
+            else if((x>200)&&(x<300)&&(y<200)&&(y>100))
+            draw(s,200,100,5);
+            else if((x>0)&&(x<100)&&(y<300)&&(y>200))
+            draw(s,0,200,6);
+            else if((x>100)&&(x<200)&&(y<300)&&(y>200))
+            draw(s,100,200,7);
+            else if((x>200)&&(x<300)&&(y<300)&&(y>200))
+            draw(s,200,200,8);
+            if(X())
+            r=1;
+            
+        }) 
+    
+   
+    
+    
+    
+        function draw(a,b,c,d)//function to draw x or o in the boxes
+        {
+            
+            
+          if((arr[d]!='X')&&(arr[d]!='O'))
+          {
+          if(a=='X')
+          ctx.drawImage(img1,b,c,100,100);
+          else
+          ctx.drawImage(img2,b,c,100,100);
+          arr[d]=a;
+          i=i+1;
+          
+        }    
+        ctx.moveTo(100,0);//moves the point to (100,0)
+        ctx.lineTo(100,300);//draws the line from (100,0) to (100,300)
+        ctx.moveTo(200,0);
+        ctx.lineTo(200,300);
+        ctx.moveTo(0,100);
+        ctx.lineTo(300,100);
+        ctx.moveTo(0,200);
+        ctx.lineTo(300,200)
+        ctx.stroke();   
+       }
+        function X()
+        {
+            let f=0;
+            let v="";
+            for(let j=0;j<3;j++)
+            {
+                //To check for vertical
+                if((arr[j]==arr[j+3])&&((arr[j+3])==arr[j+6]))
+                {ctx.moveTo(50+(j*100),50);
+                 ctx.lineTo(50+(j*100),250);
+                 ctx.stroke();
+                 f=f+1;
+                 v=arr[j];   
+                }
+                //To check for horizontal
+                if((arr[3*j]==arr[3*j+1])&&(arr[3*j+1]==arr[3*j+2]))
+                {
+                    ctx.moveTo(50,50+(j*100));
+                    ctx.lineTo(250,50+(j*100));
+                    ctx.stroke();
+                    f=f+1;
+                    v=arr[3*j];
+                }
+            }
+            //To check for diagonals
+            if((arr[0]==arr[4])&&(arr[4]==arr[8]))
+            {
+                ctx.moveTo(50,50);
+                ctx.lineTo(250,250);
+                ctx.stroke();
+                f=f+1;
+                v=arr[0];
+            }
+            if((arr[2]==arr[4])&&(arr[4]==arr[6]))
+            {
+                ctx.moveTo(250,50);
+                ctx.lineTo(50,250);
+                ctx.stroke();
+                f=f+1;
+                v=arr[2];
+            }
+            if((v=='X')||(v=='O'))
+            {
+             let message=document.querySelector("#message");
+            message.innerHTML= v+" wins";
+
+            }
+            else if(i==9)
+            {
+                let message=document.querySelector("#message");
+                message.innerHTML="Draw";
+
+            }
+            if(f==1)
+            return true;
+            else
+            return false;
+              
+
+        }
+    
+        
+   </script>
+</body>
+</html>
